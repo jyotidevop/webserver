@@ -1,1 +1,29 @@
+---
+- name: "to setup webserver"
+  hosts: webserver
+  tasks:
+  - yum:
+    name: 
+	  - httpd
+	  - firewalld
+    state: present
+  - service:
+      name: “{{ item }}”
+      state: started
+      enabled: yes
+    loop:
+     - httpd
+     - firewalld
+  - service:
+      name: firewalld
+      state: started
+      enabled: yes
+  - firewalld:
+      service: http
+      state: enabled
+      permanent: yes
+      immediate: yes
+  - template:
+      src: index.html
+      dest: /var/www/html/index.html
 
